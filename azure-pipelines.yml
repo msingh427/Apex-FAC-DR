@@ -16,16 +16,16 @@ stages:
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
+    
     - task: TerraformTask@5
       inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/'
-        backendAzureRmUseEntraIdForAuthentication: false
-        backendServiceArm: 'Apex-svc'
-        backendAzureRmStorageAccountName: ''
-        backendAzureRmContainerName: ''
-        backendAzureRmKey: ''
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/'
+            commandOptions: '-backend=false'
+            backendAzureRmUseEntraIdForAuthentication: false
+            backendServiceArm: 'Apex-svc'
+        
  
   - job: Terraform_Plan
     displayName: "Terraform Plan"
