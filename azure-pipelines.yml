@@ -1,28 +1,18 @@
-
 trigger:
 - main
-
+ 
 pool:
   vmImage: windows-latest
-
+ 
 stages:
-- stage: Terraform_Install
-  displayName: "Terraform Install Init and Plan"
-  jobs:
-  - job: Terraform_install
-    displayName: "Terraform install"
-    steps:
-
-    - task: TerraformInstaller@1
-      inputs:
-        terraformVersion: 'latest'
-
 - stage: Terraform_Init_and_Plan
   displayName: "Terraform Init and Plan"
   jobs:
+ 
   - job: Terraform_Init
     displayName: "Terraform Init"
     steps:
+    - checkout: self
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
@@ -30,17 +20,18 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/'
         backendAzureRmUseEntraIdForAuthentication: false
         backendServiceArm: 'Apex-svc'
         backendAzureRmStorageAccountName: 'stgaccountcheck'
         backendAzureRmContainerName: 'blobtest'
         backendAzureRmKey: 'tf/terraform.tfstate'
-
+ 
   - job: Terraform_Plan
     displayName: "Terraform Plan"
     dependsOn: Terraform_Init
     steps:
+    - checkout: self
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
@@ -48,12 +39,14 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/'
         environmentServiceNameAzureRM: 'Apex-svc'
-
+ 
   - job: Terraform_Apply
     displayName: "Terraform Apply"
+    dependsOn: Terraform_Plan
     steps:
+    - checkout: self
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
@@ -61,6 +54,6 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/'
         commandOptions: '-auto-approve'
         environmentServiceNameAzureRM: 'Apex-svc'
