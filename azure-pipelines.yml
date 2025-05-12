@@ -26,15 +26,9 @@ stages:
               winget install --exact --id Microsoft.AzureCLI
               az --version
             displayName: 'Install Latest Azure CLI'
-          - task: AzureCLI@2
-            displayName: 'Initialize Terraform'
+          - task: TerraformInstaller@1
             inputs:
-              azureSubscription: 'Apex-svc'
-              scriptType: 'pscore'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                terraform init
-              workingDirectory: $(terraformWorkingDirectory)
+              terraformVersion: 'latest'
 
       - job: Terraform_Plan
         displayName: 'Terraform Plan'
