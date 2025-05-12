@@ -1,9 +1,11 @@
 trigger:
-- main
- 
+  branches:
+    include:
+      - main
+
 pool:
-  vmImage: windows-latest
- 
+  vmImage: 'windows-latest'
+
 variables:
   terraformVersion: '4.0.0'
   workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
@@ -28,35 +30,39 @@ stages:
               inlineScript: |
                 terraform init -backend=false
               workingDirectory: $(workingDirectory)
-        
- 
+
       - job: Terraform_Plan
-        displayName: "Terraform Plan"
+        displayName: 'Terraform Plan'
         dependsOn: Terraform_Init
         steps:
-        - checkout: self
-        - task: TerraformInstaller@1
-          inputs:
-            terraformVersion: 'latest'
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            workingDirectory: $(workingDirectory)
-            environmentServiceNameAzureRM: 'Apex-svc'
- 
+          - checkout: self
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: $(terraformVersion)
+          - task: AzureCLI@2
+            displayName: 'Terraform Plan'
+            inputs:
+              azureSubscription: 'Apex-svc'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                terraform plan -out=tfplan
+              workingDirectory: $(workingDirectory)
+
       - job: Terraform_Apply
-        displayName: "Terraform Apply"
+        displayName: 'Terraform Apply'
         dependsOn: Terraform_Plan
         steps:
-        - checkout: self
-        - task: TerraformInstaller@1
-          inputs:
-            terraformVersion: 'latest'
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'apply'
-            workingDirectory: $(workingDirectory)
-            commandOptions: '-auto-approve'
-            environmentServiceNameAzureRM: 'Apex-svc'
+          - checkout: self
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: $(terraformVersion)
+          - task: AzureCLI@2
+            displayName: 'Terraform Apply'
+            inputs:
+              azureSubscription: 'Apex-svc'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                terraform apply -auto-approve tfplan
+              workingDirectory: $(workingDirectory)
