@@ -8,7 +8,7 @@ pool:
 
 variables:
   terraformVersion: 'latest'
-  terraformWorkingDirectory: '$(Build.SourcesDirectory)/Apex-FAC-DR/'
+  terraformWorkingDirectory: '$(System.DefaultWorkingDirectory)/Apex-FAC-DR/'
 
 stages:
   - stage: Terraform_Init_and_Plan
@@ -17,7 +17,7 @@ stages:
       - job: Terraform_Init
         displayName: 'Terraform Init'
         steps:
-          - checkout: self
+        
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: $(terraformVersion)
@@ -34,7 +34,7 @@ stages:
         displayName: 'Terraform Plan'
         dependsOn: Terraform_Init
         steps:
-          - checkout: self
+       
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: $(terraformVersion)
@@ -52,7 +52,7 @@ stages:
         displayName: 'Terraform Apply'
         dependsOn: Terraform_Plan
         steps:
-          - checkout: self
+         
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: $(terraformVersion)
