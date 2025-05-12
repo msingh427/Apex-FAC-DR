@@ -18,50 +18,55 @@ stages:
         displayName: 'Terraform Init'
         steps:
         
-          - task: TerraformInstaller@1
-            inputs:
-              terraformVersion: $(terraformVersion)
-          - script: |
-              echo "Installing latest Azure CLI..."
-              winget install --exact --id Microsoft.AzureCLI
-              az --version
-            displayName: 'Install Latest Azure CLI'
-          - task: TerraformInstaller@1
-            inputs:
-              terraformVersion: 'latest'
 
-      - job: Terraform_Plan
-        displayName: 'Terraform Plan'
-        dependsOn: Terraform_Init
-        steps:
+        - script: dir $(Build.SourcesDirectory)/terraform
+          displayName: 'List Terraform Files'
+        # steps:
+        
+      #     - task: TerraformInstaller@1
+      #       inputs:
+      #         terraformVersion: $(terraformVersion)
+      #     - script: |
+      #         echo "Installing latest Azure CLI..."
+      #         winget install --exact --id Microsoft.AzureCLI
+      #         az --version
+      #       displayName: 'Install Latest Azure CLI'
+      #     - task: TerraformInstaller@1
+      #       inputs:
+      #         terraformVersion: 'latest'
+
+      # - job: Terraform_Plan
+      #   displayName: 'Terraform Plan'
+      #   dependsOn: Terraform_Init
+      #   steps:
        
-          - task: TerraformInstaller@1
-            inputs:
-              terraformVersion: $(terraformVersion)
-          - task: AzureCLI@2
-            displayName: 'Terraform Plan'
-            inputs:
-              azureSubscription: 'Apex-svc'
-              scriptType: 'pscore'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                terraform plan -out=tfplan
-              workingDirectory: $(terraformWorkingDirectory)
+      #     - task: TerraformInstaller@1
+      #       inputs:
+      #         terraformVersion: $(terraformVersion)
+      #     - task: AzureCLI@2
+      #       displayName: 'Terraform Plan'
+      #       inputs:
+      #         azureSubscription: 'Apex-svc'
+      #         scriptType: 'pscore'
+      #         scriptLocation: 'inlineScript'
+      #         inlineScript: |
+      #           terraform plan -out=tfplan
+      #         workingDirectory: $(terraformWorkingDirectory)
 
-      - job: Terraform_Apply
-        displayName: 'Terraform Apply'
-        dependsOn: Terraform_Plan
-        steps:
+      # - job: Terraform_Apply
+      #   displayName: 'Terraform Apply'
+      #   dependsOn: Terraform_Plan
+      #   steps:
          
-          - task: TerraformInstaller@1
-            inputs:
-              terraformVersion: $(terraformVersion)
-          - task: AzureCLI@2
-            displayName: 'Terraform Apply'
-            inputs:
-              azureSubscription: 'Apex-svc'
-              scriptType: 'pscore'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                terraform apply -auto-approve tfplan
-              workingDirectory: $(terraformWorkingDirectory)
+      #     - task: TerraformInstaller@1
+      #       inputs:
+      #         terraformVersion: $(terraformVersion)
+      #     - task: AzureCLI@2
+      #       displayName: 'Terraform Apply'
+      #       inputs:
+      #         azureSubscription: 'Apex-svc'
+      #         scriptType: 'pscore'
+      #         scriptLocation: 'inlineScript'
+      #         inlineScript: |
+      #           terraform apply -auto-approve tfplan
+      #         workingDirectory: $(terraformWorkingDirectory)
