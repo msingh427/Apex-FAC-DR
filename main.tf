@@ -1,28 +1,19 @@
-
-module "rg" {
-  source   = "../../module/rg"
-  for_each = var.resource_groups
-  rg_name  = each.value.name
-  location = each.value.location
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "4.0.0"
+    }
+  }
 }
 
-module "network" {
-  source    = "../../module/network"
-  for_each  = var.virtual_networks
-  vnet_name = each.value.name
-  # subnet_names = each.value.subnets
-  rg_name  = each.value.rg_name
-  location = each.value.location
-  depends_on = [ module.rg ]
+provider "azurerm" {
+  features {}
+  resource_provider_registrations = "none"
+  subscription_id                 = "5badcc20-9d8e-4fbf-8681-5d67006faf87"
 }
 
-module "app_gateway" {
-  source      = "../../module/appgateway"
-  for_each    = var.application_gateways
-  appgw_name  = each.value.name
-  rg_name     = each.value.rg_name
-  vnet_name   = each.value.vnet_name
-  subnet_name = each.value.subnet_name
-  location    = each.value.location
-  subnet_id   = lookup(module.network["vnet1"].subnet_ids, each.value.subnet_name, null)
+resource "azurerm_resource_group" "example" {
+  name     = "example"
+  location = "West Europe"
 }
