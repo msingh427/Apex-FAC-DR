@@ -8,7 +8,7 @@ pool:
 
 variables:
   terraformVersion: 'latest'
-  workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+  terraformWorkingDirectory: '$(Build.SourcesDirectory)/Apex-FAC-DR'
 
 stages:
   - stage: Terraform_Init_and_Plan
@@ -25,11 +25,11 @@ stages:
             displayName: 'Initialize Terraform'
             inputs:
               azureSubscription: 'Apex-svc'
-              scriptType: 'bash'
+              scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
                 terraform init -backend=false
-              workingDirectory: $(workingDirectory)
+              workingDirectory: $(terraformWorkingDirectory)
 
       - job: Terraform_Plan
         displayName: 'Terraform Plan'
@@ -43,11 +43,11 @@ stages:
             displayName: 'Terraform Plan'
             inputs:
               azureSubscription: 'Apex-svc'
-              scriptType: 'bash'
+              scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
                 terraform plan -out=tfplan
-              workingDirectory: $(workingDirectory)
+              workingDirectory: $(terraformWorkingDirectory)
 
       - job: Terraform_Apply
         displayName: 'Terraform Apply'
@@ -61,8 +61,8 @@ stages:
             displayName: 'Terraform Apply'
             inputs:
               azureSubscription: 'Apex-svc'
-              scriptType: 'bash'
+              scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
                 terraform apply -auto-approve tfplan
-              workingDirectory: $(workingDirectory)
+              workingDirectory: $(terraformWorkingDirectory)
