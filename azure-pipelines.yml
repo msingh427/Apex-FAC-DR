@@ -19,7 +19,7 @@ stages:
 - stage: Terraform_Init_and_Plan
   displayName: "Terraform Init and Plan"
   jobs:
-  - job: Terrfaorm_Init
+  - job: Terraform_Init
     displayName: "Terraform Init"
     steps:
     - task: TerraformTask@5
@@ -31,11 +31,23 @@ stages:
         backendAzureRmStorageAccountName: 'stgaccountcheck'
         backendAzureRmContainerName: 'blobtest'
         backendAzureRmKey: 'tf/terraform.tfstate'
+
   - job: Terraform_Plan
     displayName: "Terraform Plan"
+    dependsOn: Terraform_Init
     steps:
     - task: TerraformTask@5
       inputs:
         provider: 'azurerm'
         command: 'plan'
+        environmentServiceNameAzureRM: 'Apex-svc'
+
+  - job: Terraform_Apply
+    displayName: "Terraform Apply"
+    steps:
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        commandOptions: '-auto-approve'
         environmentServiceNameAzureRM: 'Apex-svc'
