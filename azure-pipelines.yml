@@ -23,9 +23,9 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/'
         backendAzureRmUseEntraIdForAuthentication: false
         backendServiceArm: 'Apex-svc'
-        backendAzureRmStorageAccountName: 'stgaccountcheck'
-        backendAzureRmContainerName: 'blobtest'
-        backendAzureRmKey: 'tf/terraform.tfstate'
+        backendAzureRmStorageAccountName: ''
+        backendAzureRmContainerName: ''
+        backendAzureRmKey: ''
  
   - job: Terraform_Plan
     displayName: "Terraform Plan"
