@@ -6,13 +6,36 @@ pool:
   vmImage: windows-latest
 
 stages:
-- stage: Terraform Install
+- stage: Terraform_Install
   displayName: "Terraform Install"
   jobs:
-  - job: Terraform install
+  - job: Terraform_install
     displayName: "Terraform install"
     steps:
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
 
+- stage: Terraform_Init_and_Plan
+  displayName: "Terraform Init and Plan"
+  jobs:
+  - job: Terrfaorm_Init
+    displayName: "Terraform Init"
+    steps:
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendAzureRmUseEntraIdForAuthentication: false
+        backendServiceArm: 'Apex-svc'
+        backendAzureRmStorageAccountName: 'stgaccountcheck'
+        backendAzureRmContainerName: 'blobtest'
+        backendAzureRmKey: 'tf/terraform.tfstate'
+  - job: Terraform_Plan
+    displayName: "Terraform Plan"
+    steps:
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        environmentServiceNameAzureRM: 'Apex-svc'
