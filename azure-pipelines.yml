@@ -17,9 +17,9 @@ stages:
       - job: Terraform_Init
         displayName: 'Terraform Init'
         steps:
-        
 
-        - script: dir $(Build.SourcesDirectory)/terraform
+
+        - script: dir $(System.DefaultWorkingDirectory)
           displayName: 'List Terraform Files'
         # steps:
         
