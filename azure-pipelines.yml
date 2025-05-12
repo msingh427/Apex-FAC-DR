@@ -32,7 +32,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
         backendAzureRmUseEntraIdForAuthentication: false
         backendServiceArm: 'Apex-svc'
         backendAzureRmStorageAccountName: 'stgaccountcheck'
@@ -47,6 +47,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'plan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
         environmentServiceNameAzureRM: 'Apex-svc'
 
   - job: Terraform_Apply
@@ -56,5 +57,6 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
         commandOptions: '-auto-approve'
         environmentServiceNameAzureRM: 'Apex-svc'
