@@ -8,7 +8,7 @@ pool:
 
 variables:
   terraformVersion: 'latest'
-  terraformWorkingDirectory: '$(Build.SourcesDirectory)/Apex-FAC-DR'
+  terraformWorkingDirectory: '$(Build.SourcesDirectory)/Apex-FAC-DR/'
 
 stages:
   - stage: Terraform_Init_and_Plan
