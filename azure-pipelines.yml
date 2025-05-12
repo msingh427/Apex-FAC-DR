@@ -21,6 +21,11 @@ stages:
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: $(terraformVersion)
+          - script: |
+              echo "Installing latest Azure CLI..."
+              winget install --exact --id Microsoft.AzureCLI
+              az --version
+            displayName: 'Install Latest Azure CLI'
           - task: AzureCLI@2
             displayName: 'Initialize Terraform'
             inputs:
@@ -28,7 +33,7 @@ stages:
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                terraform init -backend=false
+                terraform init
               workingDirectory: $(terraformWorkingDirectory)
 
       - job: Terraform_Plan
