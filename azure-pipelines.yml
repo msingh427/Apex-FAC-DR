@@ -55,14 +55,8 @@ stages:
                 terraform plan 
               workingDirectory: $(terraformWorkingDirectory)
 
-      - job: Terraform_Apply
-        displayName: 'Terraform Apply'
-        dependsOn: Terraform_Plan
-        steps:
+    
          
-          - task: TerraformInstaller@1
-            inputs:
-              terraformVersion: $(terraformVersion)
           - task: AzureCLI@2
             displayName: 'Terraform Apply'
             inputs:
@@ -70,5 +64,6 @@ stages:
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
+                
                 terraform apply -auto-approve
               workingDirectory: $(terraformWorkingDirectory)
