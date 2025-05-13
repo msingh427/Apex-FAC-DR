@@ -51,8 +51,8 @@ stages:
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                terraform init
-                terraform plan -out=tfplan
+                terraform init -upgrade
+                terraform plan 
               workingDirectory: $(terraformWorkingDirectory)
 
       - job: Terraform_Apply
@@ -70,5 +70,5 @@ stages:
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                terraform apply -auto-approve tfplan
+                terraform apply -auto-approve
               workingDirectory: $(terraformWorkingDirectory)
