@@ -51,6 +51,7 @@ stages:
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
+                terraform init
                 terraform plan -out=tfplan
               workingDirectory: $(terraformWorkingDirectory)
 
