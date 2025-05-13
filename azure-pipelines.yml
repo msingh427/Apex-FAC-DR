@@ -47,7 +47,7 @@ stages:
           - task: AzureCLI@2
             displayName: 'Terraform Plan'
             inputs:
-              azureSubscription: 'Apex-svc'
+              azureSubscription: 'DR-Apex'
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
@@ -60,7 +60,7 @@ stages:
           - task: AzureCLI@2
             displayName: 'Terraform Apply'
             inputs:
-              azureSubscription: 'Apex-svc'
+              azureSubscription: 'DR-Apex'
               scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
